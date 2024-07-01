@@ -1,10 +1,14 @@
 let w
 let h
+let stroke = "#000"
+let size = 3
+let detail = 100
 
 drawGraph(10,10)
 
-drawLinearEq(x=>x,{stroke:"#0000ff",width:4})
-drawLinearEq(x=>x*x,{stroke:"#00ff00",width:4})
+drawDashedEq(x=>x)
+setColor("#00ff00")
+drawEq(x=>x*x)
 
 function drawGraph(x, y){
   w=x*20
@@ -24,7 +28,7 @@ function drawGraph(x, y){
   }
 }
 
-function drawLinearEq(func, options){
+function generateEq(func){
   let points=[[]]
   for (let x = -w/2;x <= w/2;x++){
     const point = [x+w/2,func(x)+h/2]
@@ -32,5 +36,25 @@ function drawLinearEq(func, options){
      points[0].push(point) 
     }
   }
-  drawLines(points,options)
+  return points
+}
+
+function setDetail(d){
+  detail=d
+}
+
+function setColor(c){
+  stroke=c
+}
+
+function setSize(s){
+  size=s
+}
+
+function drawEq(func){
+  drawLines([bt.catmullRom(generateEq(func)[0], detail)],{width:size,stroke:stroke})
+}
+
+function drawDashedEq(func){
+  
 }
