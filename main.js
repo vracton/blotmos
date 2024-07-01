@@ -4,12 +4,6 @@ let stroke = "#000"
 let size = 3
 let detail = 100
 
-drawGraph(10,10)
-
-drawDashedEq(x=>x)
-setColor("#00ff00")
-drawEq(x=>x*x)
-
 function drawGraph(x, y){
   w=x*20
   h=y*20
@@ -36,7 +30,7 @@ function generateEq(func){
      points[0].push(point) 
     }
   }
-  return points
+  return bt.copy(points)
 }
 
 function setDetail(d){
@@ -52,9 +46,30 @@ function setSize(s){
 }
 
 function drawEq(func){
-  drawLines([bt.catmullRom(generateEq(func)[0], detail)],{width:size,stroke:stroke})
+  drawLines([bt.copy(bt.catmullRom(generateEq(func)[0], detail))],{width:size,stroke:stroke})
 }
 
-function drawDashedEq(func){
-  
+function drawDashedEq(func, dashLen, space){
+  const pLine = bt.copy(bt.catmullRom(generateEq(func)[0], detail))
+  for (let i = 0;i < pLine.length;i+=(dashLen+space)){
+    drawLines([[pLine[i],pLine[i+dashLen]]],{width:size,stroke:stroke})
+  }
 }
+
+function drawPoint(x,y){
+  drawLines([bt.catmullRom([[x-0.1,y-0.1],[x+0.1,y-0.1],[x+0.1,y+0.1],[x-0.1,y+0.1],[x-0.1,y-0.1]])],{width:15,stroke:stroke,fill:stroke})
+}
+
+//<-------------------------------------------------->
+
+drawGraph(10,10)
+
+setColor("#BF40BF")
+drawPoint(50,150)
+setColor("#00ff00")
+drawEq(x=>x, 1000, 1000)
+setSize(5)
+setColor("#ff0000")
+drawDashedEq(x=>x*x, 100, 50)
+setColor("#0000ff")
+drawDashedEq(x=>x*x,50,50)
