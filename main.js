@@ -67,6 +67,30 @@ function drawPoint(xPos,yPos){
   drawLines([bt.catmullRom([[x-0.1,y-0.1],[x+0.1,y-0.1],[x+0.1,y+0.1],[x-0.1,y+0.1],[x-0.1,y-0.1]])],{width:15,stroke:stroke,fill:stroke})
 }
 
+function drawSector(x,y,r,filled,angLen){
+  let pLine = [[]]
+  for (let t=0;t<=angLen;t++){
+    let coord = []
+    coord[0]=r*Math.sin(t/180*Math.PI)+x+w/2
+    coord[1]=r*Math.cos(t/180*Math.PI)+y+h/2
+    pLine[0].push(coord)
+  }
+  pLine[0].push([x+w/2,y+h/2])
+  pLine[0].push([x+w/2,y+h/2+r])
+  drawLines(pLine,{width:size,stroke:stroke,fill:(filled?fill:"#00000000")})
+}
+
+function drawCircle(x,y,r,filled){
+  let pLine = [[]]
+  for (let t=0;t<=360;t++){
+    let coord = []
+    coord[0]=r*Math.sin(t/180*Math.PI)+x+w/2
+    coord[1]=r*Math.cos(t/180*Math.PI)+y+h/2
+    pLine[0].push(coord)
+  }
+  drawLines(pLine,{width:size,stroke:stroke,fill:(filled?fill:"#00000000")})
+}
+
 function drawPolygon(filled){
   let pLine = [[[]]]
   for (let i=1;i<arguments.length;i++){
@@ -80,7 +104,7 @@ function drawPolygon(filled){
     if (pLine[0][0][pLine[0][0].length-1].length==1){
       pLine[0][0].pop()
     }
-    console.log(pLine)
+    console.log(pLine[0])
     pLine[0][0].push(pLine[0][0][0])
     drawLines(pLine[0],{width:size,stroke:stroke,fill:(filled?fill:"#00000000")})
   }
@@ -88,14 +112,17 @@ function drawPolygon(filled){
 
 //-------------------------------------------------------------------------
 
-drawGraph(10,10)
+drawGraph(10,20)
 
+setFill("#0ff00050")
+drawCircle(80,-80,10,true)
+drawSector(-30,120,50,false,103)
 setFill("#000ff050")
 drawPolygon(true,0,0,100,0,100,100)
-setColor("#BF40BF")
-drawPoint(50,50)
 setColor("#00ff00")
 drawEq(x=>x, 1000, 1000)
+setColor("#BF40BF")
+drawPoint(50,50)
 setSize(5)
 setColor("#ff0000")
 drawDashedEq(x=>x*x, 100, 50)
