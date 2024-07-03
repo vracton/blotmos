@@ -64,7 +64,20 @@ function drawDashedEq(func, dashLen, space){
 function drawPoint(xPos,yPos){
   const x = xPos+w/2
   const y = yPos+h/2
-  drawLines([bt.catmullRom([[x-0.1,y-0.1],[x+0.1,y-0.1],[x+0.1,y+0.1],[x-0.1,y+0.1],[x-0.1,y-0.1]])],{width:15,stroke:stroke,fill:stroke})
+  drawLines([bt.catmullRom([[x-0.1,y-0.1],[x+0.1,y-0.1],[x+0.1,y+0.1],[x-0.1,y+0.1],[x-0.1,y-0.1]])],{width:10,stroke:stroke,fill:stroke})
+}
+
+function drawVector(rawX1,rawY1,rawX2,rawY2){
+  const x1=rawX1+w/2
+  const y1=rawY1+h/2
+  const x2=rawX2+w/2
+  const y2=rawY2+h/2
+  drawLines([[[x1,y1],[x2,y2]]],{width:size,stroke:stroke})
+  drawPoint(rawX1,rawY1)
+  const angle = Math.atan((y2-y1)/(x2-x1))*180/Math.PI
+  const arrowDif = y2<y1?5:-5
+  drawLines(bt.rotate([[[x2,y2],[x2+arrowDif,y2+arrowDif]]],angle-180,[x2,y2]),{width:size,stroke:stroke})
+  drawLines(bt.rotate([[[x2,y2],[x2+arrowDif,y2+arrowDif]]],angle+90,[x2,y2]),{width:size,stroke:stroke})
 }
 
 function drawSector(x,y,r,filled,angLen){
@@ -78,6 +91,10 @@ function drawSector(x,y,r,filled,angLen){
   pLine[0].push([x+w/2,y+h/2])
   pLine[0].push([x+w/2,y+h/2+r])
   drawLines(pLine,{width:size,stroke:stroke,fill:(filled?fill:"#00000000")})
+  drawPoint(x,y)
+  drawPoint(x,y+r)
+  const sectorEnd = pLine[0][pLine[0].length-3]
+  drawPoint(sectorEnd[0]-w/2,sectorEnd[1]-h/2)
 }
 
 function drawCircle(x,y,r,filled){
@@ -89,6 +106,7 @@ function drawCircle(x,y,r,filled){
     pLine[0].push(coord)
   }
   drawLines(pLine,{width:size,stroke:stroke,fill:(filled?fill:"#00000000")})
+  drawPoint(x,y)
 }
 
 function drawPolygon(filled){
@@ -104,9 +122,13 @@ function drawPolygon(filled){
     if (pLine[0][0][pLine[0][0].length-1].length==1){
       pLine[0][0].pop()
     }
-    console.log(pLine[0])
+    //console.log(pLine[0])
     pLine[0][0].push(pLine[0][0][0])
     drawLines(pLine[0],{width:size,stroke:stroke,fill:(filled?fill:"#00000000")})
+    pLine[0][0].pop()
+    for (let pt of pLine[0][0]){
+      drawPoint(pt[0]-w/2,pt[1]-h/2)
+    }
   }
 }
 
@@ -116,6 +138,8 @@ drawGraph(10,20)
 
 setFill("#0ff00050")
 drawCircle(80,-80,10,true)
+drawVector(-10,10,-40,70)
+drawVector(-50,60,-20,0)
 drawSector(-30,120,50,false,103)
 setFill("#000ff050")
 drawPolygon(true,0,0,100,0,100,100)
