@@ -26,6 +26,9 @@ function drawGraph(x, y){
 function generateEq(func){
   let points=[[]]
   for (let x = -w/2;x <= w/2;x++){
+    if (func(x)==0){
+      drawPoint(x,0)
+    }
     const point = [x+w/2,func(x)+h/2]
     if (point[1]>=0&&point[1]<=h){
      points[0].push(point) 
@@ -57,7 +60,11 @@ function drawEq(func){
 function drawDashedEq(func, dashLen, space){
   const pLine = bt.copy(bt.catmullRom(generateEq(func)[0], detail))
   for (let i = 0;i < pLine.length;i+=(dashLen+space)){
-    drawLines(bt.copy([[[pLine[i],pLine[i+dashLen]]]])[0],{width:size,stroke:stroke})
+    if (pLine.length>i+dashLen){
+      drawPoint(pLine[i][0]-w/2,pLine[i][1]-h/2)
+      drawPoint(pLine[i+dashLen][0]-w/2,pLine[i+dashLen][1]-h/2)
+      drawLines(bt.copy([[[pLine[i],pLine[i+dashLen]]]])[0],{width:size,stroke:stroke})
+    }
   }
 }
 
@@ -80,19 +87,32 @@ function drawVector(rawX1,rawY1,rawX2,rawY2){
   drawLines(bt.rotate([[[x2,y2],[x2+arrowDif,y2+arrowDif]]],angle+90,[x2,y2]),{width:size,stroke:stroke})
 }
 
+function drawDottedEq(func, rep){
+  let points=[]
+  for (let x = -w/2;x <= w/2;x+=rep){
+    const point = [x+w/2,func(x)+h/2]
+    if (point[1]>=0&&point[1]<=h){
+     points.push(point) 
+    }
+  }
+  for (let pt of points){
+    drawPoint(pt[0]-w/2,pt[1]-h/2)
+  }
+}
+
 function drawSector(x,y,r,filled,angLen){
   let pLine = [[]]
   for (let t=0;t<=angLen;t++){
     let coord = []
-    coord[0]=r*Math.sin(t/180*Math.PI)+x+w/2
-    coord[1]=r*Math.cos(t/180*Math.PI)+y+h/2
+    coord[0]=r*10*Math.sin(t/180*Math.PI)+x*10+w/2
+    coord[1]=r*10*Math.cos(t/180*Math.PI)+y*10+h/2
     pLine[0].push(coord)
   }
-  pLine[0].push([x+w/2,y+h/2])
-  pLine[0].push([x+w/2,y+h/2+r])
+  pLine[0].push([x*10+w/2,y*10+h/2])
+  pLine[0].push([x*10+w/2,y*10+h/2+r*10])
   drawLines(pLine,{width:size,stroke:stroke,fill:(filled?fill:"#00000000")})
-  drawPoint(x,y)
-  drawPoint(x,y+r)
+  drawPoint(x*10,y*10)
+  drawPoint(x*10,y*10+r*10)
   const sectorEnd = pLine[0][pLine[0].length-3]
   drawPoint(sectorEnd[0]-w/2,sectorEnd[1]-h/2)
 }
@@ -101,12 +121,12 @@ function drawCircle(x,y,r,filled){
   let pLine = [[]]
   for (let t=0;t<=360;t++){
     let coord = []
-    coord[0]=r*Math.sin(t/180*Math.PI)+x+w/2
-    coord[1]=r*Math.cos(t/180*Math.PI)+y+h/2
+    coord[0]=r*10*Math.sin(t/180*Math.PI)+(x*10)+w/2
+    coord[1]=r*10*Math.cos(t/180*Math.PI)+(y*10)+h/2
     pLine[0].push(coord)
   }
   drawLines(pLine,{width:size,stroke:stroke,fill:(filled?fill:"#00000000")})
-  drawPoint(x,y)
+  drawPoint(x*10,y*10)
 }
 
 function drawPolygon(filled){
@@ -137,12 +157,13 @@ function drawPolygon(filled){
 drawGraph(10,20)
 
 setFill("#0ff00050")
-drawCircle(80,-80,10,true)
+drawCircle(8,-8,1,true)
 drawVector(-10,10,-40,70)
 drawVector(-50,60,-20,0)
-drawSector(-30,120,50,false,103)
+drawSector(-3,12,5,false,103)
 setFill("#000ff050")
 drawPolygon(true,0,0,100,0,100,100)
+drawDottedEq(x=>-x*x, 2)
 setColor("#00ff00")
 drawEq(x=>x, 1000, 1000)
 setColor("#BF40BF")
