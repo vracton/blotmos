@@ -74,6 +74,15 @@ function drawPoint(xPos,yPos){
   drawLines([bt.catmullRom([[x-0.1,y-0.1],[x+0.1,y-0.1],[x+0.1,y+0.1],[x-0.1,y+0.1],[x-0.1,y-0.1]])],{width:10,stroke:stroke,fill:stroke})
 }
 
+function polarToRect(coords){
+  return [coords[0]*Math.cos(coords[1]*Math.PI/180),coords[0]*Math.sin(coords[1]*Math.PI/180)]
+}
+
+function drawPolarPoint(r,theta){
+  const coords = polarToRect([r,theta])
+  drawPoint(coords[0],coords[1])
+}
+
 function drawVector(rawX1,rawY1,rawX2,rawY2){
   const x1=rawX1+w/2
   const y1=rawY1+h/2
@@ -165,6 +174,7 @@ setFill("#000ff050")
 drawPolygon(true,0,0,100,0,100,100)
 drawDottedEq(x=>-x*x, 2)
 setColor("#00ff00")
+drawPolarPoint(5,207)
 drawEq(x=>x, 1000, 1000)
 setColor("#BF40BF")
 drawPoint(50,50)
