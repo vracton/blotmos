@@ -75,12 +75,22 @@ function drawPoint(xPos,yPos){
 }
 
 function polarToRect(coords){
+  console.log(coords)
   return [coords[0]*Math.cos(coords[1]*Math.PI/180),coords[0]*Math.sin(coords[1]*Math.PI/180)]
 }
 
 function drawPolarPoint(r,theta){
   const coords = polarToRect([r,theta])
   drawPoint(coords[0],coords[1])
+}
+
+function drawPolarEq(func){
+  const pLine = /*bt.catmullRom(*/generateEq(func)/*[0], detail)*/
+  for (let i = 0;i < pLine[0].length;i++){
+    const cartCoords = polarToRect(pLine[0][i])
+    pLine[0][i]= [cartCoords[0],cartCoords[1]]
+  }
+  drawLines(pLine,{width:size,stroke:stroke})
 }
 
 function drawVector(rawX1,rawY1,rawX2,rawY2){
@@ -170,6 +180,7 @@ drawCircle(8,-8,1,true)
 drawVector(-10,10,-40,70)
 drawVector(-50,60,-20,0)
 drawSector(-3,12,5,false,103)
+drawPolarEq(r=>Math.sin(r))
 setFill("#000ff050")
 drawPolygon(true,0,0,100,0,100,100)
 drawDottedEq(x=>-x*x, 2)
