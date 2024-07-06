@@ -75,7 +75,7 @@ function drawPoint(xPos,yPos){
 }
 
 function polarToRect(coords){
-  console.log(coords)
+  //console.log(coords)
   return [coords[0]*Math.cos(coords[1]*Math.PI/180),coords[0]*Math.sin(coords[1]*Math.PI/180)]
 }
 
@@ -85,12 +85,21 @@ function drawPolarPoint(r,theta){
 }
 
 function drawPolarEq(func){
-  const pLine = /*bt.catmullRom(*/generateEq(func)/*[0], detail)*/
-  for (let i = 0;i < pLine[0].length;i++){
-    const cartCoords = polarToRect(pLine[0][i])
-    pLine[0][i]= [cartCoords[0],cartCoords[1]]
+  const pLine=[[]]
+  for (let t = 0;t <= 360;t++){
+    let point = [func(t*Math.PI/180)*10,t]
+    //if (point[1]>=0&&point[1]<=h){
+    point = polarToRect(point)
+    pLine[0].push([point[0]+w/2,point[1]+h/2])
+    //pLine[0].push(point) 
+    //}
   }
-  drawLines(pLine,{width:size,stroke:stroke})
+  //for (let i = 0;i < pLine[0].length;i++){
+    //const cartCoords = polarToRect(pLine[0][i])
+    //pLine[0][i]= [cartCoords[0],cartCoords[1]]
+  //}
+  //console.log(pLine)
+  drawLines(pLine,{width:size,stroke:stroke,fill:fill})
 }
 
 function drawVector(rawX1,rawY1,rawX2,rawY2){
@@ -152,9 +161,9 @@ function drawPolygon(filled){
   let pLine = [[[]]]
   for (let i=1;i<arguments.length;i++){
     if (pLine[0][0][pLine[0][0].length-1]&&pLine[0][0][pLine[0][0].length-1].length==1){
-      pLine[0][0][pLine[0][0].length-1][1]=arguments[i]+h/2
+      pLine[0][0][pLine[0][0].length-1][1]=(arguments[i]*10+h/2)
     } else {
-      pLine[0][0].push([arguments[i]+w/2])
+      pLine[0][0].push([(10*arguments[i]+w/2)])
     }
   }
   if (pLine[0][0].length>0){
@@ -182,11 +191,11 @@ drawVector(-50,60,-20,0)
 drawSector(-3,12,5,false,103)
 drawPolarEq(r=>Math.sin(r))
 setFill("#000ff050")
-drawPolygon(true,0,0,100,0,100,100)
+drawPolygon(true,0,0,10,0,10,10)
 drawDottedEq(x=>-x*x, 2)
 setColor("#00ff00")
 drawPolarPoint(5,207)
-drawEq(x=>x, 1000, 1000)
+drawEq(x=>x)
 setColor("#BF40BF")
 drawPoint(50,50)
 setSize(5)
