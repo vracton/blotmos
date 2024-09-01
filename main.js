@@ -38,7 +38,7 @@ function generateEq(func){
 }
 
 function setDetail(d){
-  detail=d
+  detail = d
 }
 
 function setColor(c){
@@ -50,7 +50,7 @@ function setFill(f){
 }
 
 function setSize(s){
-  size=s
+  size = s
 }
 
 function drawEq(func){
@@ -75,7 +75,6 @@ function drawPoint(xPos,yPos){
 }
 
 function polarToRect(coords){
-  //console.log(coords)
   return [coords[0]*Math.cos(coords[1]*Math.PI/180),coords[0]*Math.sin(coords[1]*Math.PI/180)]
 }
 
@@ -88,17 +87,9 @@ function drawPolarEq(func){
   const pLine=[[]]
   for (let t = 0;t <= 360;t++){
     let point = [func(t*Math.PI/180)*10,t]
-    //if (point[1]>=0&&point[1]<=h){
     point = polarToRect(point)
     pLine[0].push([point[0]+w/2,point[1]+h/2])
-    //pLine[0].push(point) 
-    //}
   }
-  //for (let i = 0;i < pLine[0].length;i++){
-    //const cartCoords = polarToRect(pLine[0][i])
-    //pLine[0][i]= [cartCoords[0],cartCoords[1]]
-  //}
-  //console.log(pLine)
   drawLines(pLine,{width:size,stroke:stroke,fill:fill})
 }
 
@@ -180,6 +171,7 @@ function drawPolygon(filled){
   }
 }
 
+//Draw Code Here
 //-------------------------------------------------------------------------
 
 drawGraph(10,20)
