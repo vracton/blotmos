@@ -1,5 +1,8 @@
 # Blotmos
 
+![image](https://github.com/user-attachments/assets/5ad56d3a-2dc1-4bff-8868-5ab3a8a87b76)
+
+
 To try this, you have two options.
 
 1. Copy the code, paste in [Blot editor](https://blot.hackclub.com/editor), and then press run.
